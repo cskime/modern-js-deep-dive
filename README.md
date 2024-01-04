@@ -1,8 +1,6 @@
 # Modern JavaScript Deep Dive
 
-## Tools
-
-- [📚 Modern JavaScript Deep Dive](https://m.yes24.com/Goods/Detail/92742567)
+- 📚 [Modern JavaScript Deep Dive](https://m.yes24.com/Goods/Detail/92742567)
 
 ## Contents
 

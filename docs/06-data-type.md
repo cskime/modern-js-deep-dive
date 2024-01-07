@@ -114,3 +114,4 @@
 - Immutable primitive type
 - 다른 값과 중복되지 않는 유일한 값
 - 이름이 충돌할 위험이 없는 객체의 유일한 프로퍼티 키를 만들 때 사용
+  - `Symbol('key')`

@@ -3,6 +3,25 @@
 - Operator : 하나 이상의 표현식을 대상으로 연산을 수행하여 하나의 값을 만듦
 - Operand : 연산하는 대상 == 값으로 평가될 수 있는 표현식
 - Side effect : Operand의 값이 변경되는 것
+- 요약
+  - Arithmetic
+    - Binary : `+`, `-`, `*`, `/`, `%`
+    - Unary : `++`, `--`, `+`, `-`
+  - Assignment : `=`, `==`, `-=`, `*=`, `/=`, `%=`, `**=`
+  - Comparison
+    - Equality
+      - Loose : `==`
+      - Strict : `===`
+      - Nan : `Number.isNaN(e)`
+      - `Object.is(e1, e2)`
+    - Greater/Smaller : `>`, `>=`, `<`, `<=`
+  - Ternary : `e ? te : fe`
+  - Logical : `||`, `&&`, `!`
+  - Type
+    - `typeof`
+    - `typeof null;` => `"object"`
+    - `typeof undeclared;` => `"undefined"`
+  - Exponent : `**`, `Math.pow(b,e)`
 
 ## 1. 산술 연산자 (Arithmetic operator)
 

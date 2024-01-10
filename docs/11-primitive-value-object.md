@@ -1,4 +1,4 @@
-# 11. Primitive Type vs. Object/Reference Type
+# 11. Primitive value vs. Object
 
 ## Summary
 

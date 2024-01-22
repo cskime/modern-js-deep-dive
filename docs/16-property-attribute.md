@@ -21,6 +21,7 @@
   - attributes: value, writable, enumerable, configurable
 - Accessor property
   - 값을 갖지 않고 다른 data property의 값을 읽거나 저장할 때 호출되는 접근자 함수(accessor function)로 구성된 property
+  - `__proto__`는 객체의 prototype에 대한 accessor property이다.
   - attributes: **get**, **set**, enumerable, configurable
   - `get` : getter function
   - `set` : setter function

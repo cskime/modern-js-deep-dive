@@ -427,8 +427,124 @@ me.sayHello();
 ## Static Property/Method
 
 - 생성자 함수로 instance를 생성하지 않아도 참조/호출할 수 있는 property/method
-- 생성자 함수에 property/method를 직접 정의해서 참조/호출한다.
+- 생성자 함수에 property/method를 **직접 정의**해서 참조/호출한다.
+- 객체 instance의 prototype chain에 포함되지 않기 때문에 **instance에서 접근할 수 없다**.
 
   ```js
+  function Person(name) {
+    this.name = name;
+  }
 
+  Person.staticProperty = "Static property";
+  Person.staticMethod = function () {
+    console.log("Static method");
+  };
+
+  const me = new Person("Kim");
+  Person.staticMethod(); // Static method
+  me.staticMethod(): // TypeError: me.staticMethod is not a function
   ```
+
+- 함수 내에서 `this`는 instance를 가리키므로 **static method 내부에서는 `this`를 사용할 수 없다.**
+
+## Property Check
+
+- `in` 연산자 : **상속 포함** 모든 property에 대해 특정 property가 존재하는지 검사
+  ```js
+  const person = {
+    name: "Kim",
+    address: "Seoul",
+  };
+  console.log("name" in person); // true
+  console.log("age" in person); // false
+  console.log("toString" in person); // true -> Object.prototype에서 상속받은 property도 검색됨
+  ```
+- `Reflect.has()` : ES6+에서 `in` 연산자와 동일한 기능
+  ```js
+  console.log(Reflect.has(person, "toString")); // true
+  ```
+- `Object.prototype.hasOwnProperty()` : **상속 제외** 객체에 직접 정의된 property에 대해 특정 property가 존재하는지 검사
+  ```js
+  console.log(person.hasOwnProperty("name")); // true
+  console.log(person.hasOwnProperty("toString")); // false -> Object.prototype에서 상속받은 property는 검색되지 않음
+  ```
+
+## Property Enumeration
+
+- `for...in` : **상속 포함** 객체의 **enumerable 및 `Symbol`이 아닌 property**들을 순회
+
+  ```js
+  const person = {
+    name: "kim",
+    address: "seoul",
+    Symbol(id): "id",
+    __proto__: { age: 20 },
+  };
+
+  for (const key in person) {
+    console.log(key + ": " + person[key]);
+  }
+
+  // name: kim
+  // address: seoul
+  // age: 20 -> 상속 받은 property
+  ```
+
+  - 기본적으로 열거되는 순서는 보장되지 않음 (대부분의 모던 브라우저는 property 정의 순서대로 열거)
+  - 상속받은 property까지 열거하므로 `Object.prototype.hasOwnProperty`로 **자신의 property인지 확인하는 과정**이 필요하다.
+
+- `Object.keys` : **상속 제외** 객체 자신의 enumerable property의 key를 배열로 반환
+  ```js
+  console.log(Object.keys(person)); // ["name", "address"]
+  ```
+- `Object.values` : **상속 제외** 객체 자신의 enumerable property의 value를 배열로 반환 (ES8+)
+  ```js
+  console.log(Object.values(person)); // ["kim", "seoul"]
+  ```
+- `Object.entries` : **상속 제외** 객체 자신의 enumerable property의 key-value 쌍을 배열로 반환 (ES8+)
+  ```js
+  console.log(Object.keys(person)); // [["name", "kim"], ["address", "seoul"]]
+  ```
+
+### Enumerable
+
+- Property descriptor에서 `enumerable`이 `false`로 설정된 property는 객체를 순회할 때 포함되지 않는다.
+- `Object.prototype.toString`은 `enumerable`이 `false`이므로 `for...in`으로 순회해도 포함되지 않는다.
+
+  ```js
+  console.log(Object.getOwnPropertyDescriptor(Object.prototype, "toString"));
+  // { value: f, writable: true, enumerable: false, configurable: true }
+
+  for (const key in person) {
+    console.log(key);
+  }
+
+  // name
+  // address
+  // age
+  // toString (x)
+  ```
+
+### 배열 item 순회
+
+- 배열도 객체이므로 property를 가질 수 있다.
+- 배열의 item과 property는 다르다.
+- **배열의 item을 순회**할 때는 `for...in` 대신 다른 구문을 사용한다.
+
+  - `for...of` : **key가 아닌 값** 순회
+
+    ```js
+    const arr = [1, 2, 3];
+    arr.x = 10; // 배열도 객체
+
+    for (const value in arr) {
+      console.log(value); // 1 2 3 10 -> `for...in`은 property 값(10)까지 순회한다.
+    }
+
+    for (const value of arr) {
+      console.log(value); // 1 2 3 -> property 값(10)은 출력되지 않음
+    }
+    ```
+
+  - `Array.prototype.forEach`도 동일한 동작
+  - `for (변수 선언문; 조건식; 증감식)` 구문도

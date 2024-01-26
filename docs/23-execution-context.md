@@ -191,6 +191,8 @@ function foo(a) {
 foo(20); // 20 + 10 + 3 + 4 + 5 = 42
 ```
 
+<img src="./img/execution-context-1.png" width="1000" />
+
 ### 코드 실행 순서
 
 소스코드 타입 별로 **평가 -> 실행 -> 종료**가 반복된다.
